@@ -1,9 +1,11 @@
+require('dotenv').load();
 var express  = require('express');
 var app      = express();
-var port     = process.env.PORT || 8080;
-var mongoose = require('mongoose');
 var passport = require('passport');
+var port     = process.env.PORT || 8080;
+var secret = process.env.SECRET;
 var flash    = require('connect-flash');
+var mongoose = require('mongoose');
 
 var configDB = require('./config/database.js');
 
@@ -21,7 +23,7 @@ app.configure(function() {
 
 	app.set('view engine', 'ejs'); // set up ejs for templating
 
-	app.use(express.session({ secret: process.env.SESSION_SECRET })); // session secret
+	app.use(express.session({ secret: secret })); // session secret
 	app.use(passport.initialize());
 	app.use(passport.session()); // persistent login sessions
 	app.use(flash()); // use connect-flash for flash messages stored in session

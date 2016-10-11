@@ -5,13 +5,14 @@
     "node": "~4.4.7",
     "npm": "~2.15.8"
   },
-  "dependencies" : {
-    "express" : "~3.4.4",
-    "ejs" : "~0.8.5",
-    "mongoose" : "~3.8.1",
-    "passport" : "~0.1.17",
-    "passport-twitter" : "~1.0.2",
-    "connect-flash" : "~0.1.1",
-    "bcrypt-nodejs" : "latest"
+  "dependencies": {
+    "bcrypt-nodejs": "latest",
+    "connect-flash": "~0.1.1",
+    "dotenv": "^2.0.0",
+    "ejs": "~0.8.5",
+    "express": "~3.4.4",
+    "mongoose": "~3.8.1",
+    "passport": "~0.1.17",
+    "passport-twitter": "~1.0.2"
   }
 }
