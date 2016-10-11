@@ -1,4 +1,4 @@
-// require('dotenv').config();
+// require('dotenv').config(); // remove for heroku
 var express  = require('express');
 var app      = express();
 var passport = require('passport');
@@ -6,12 +6,9 @@ var port     = process.env.PORT || 8080;
 var secret = process.env.SECRET;
 var flash    = require('connect-flash');
 var mongoose = require('mongoose');
-app.set( 'port', ( port || 5000 ));
 
-// configuration ===============================================================
-mongoose.connect(process.env.MONGOLAB_URI); // connect to our database
-
-require('./config/passport.js')(passport); // pass passport for configuration
+require('./app_api/models/db');
+require('./config/passport')(passport); // pass passport for configuration
 
 app.configure(function() {
 
