@@ -10,7 +10,7 @@ var mongoose = require('mongoose');
 // configuration ===============================================================
 mongoose.connect(process.env.MONGOLAB_URI); // connect to our database
 
-require('./config/passport')(passport); // pass passport for configuration
+require('./config/passport.js')(passport); // pass passport for configuration
 
 app.configure(function() {
 
