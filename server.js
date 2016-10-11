@@ -14,12 +14,11 @@ app.configure(function() {
 
 	// set up our express application
 	app.use(express.logger('dev')); // log every request to the console
-	app.use(express.cookieParser()); // read cookies (needed for auth)
+	app.use(express.cookieParser(secret)); // read cookies (needed for auth)
 	app.use(express.bodyParser()); // get information from html forms
 
 	app.set('view engine', 'ejs'); // set up ejs for templating
-
-	app.use(express.session({ secret: secret })); // session secret
+	app.use(express.session()); // session secret
 	app.use(passport.initialize());
 	app.use(passport.session()); // persistent login sessions
 	app.use(flash()); // use connect-flash for flash messages stored in session
