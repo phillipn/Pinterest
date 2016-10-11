@@ -1,4 +1,4 @@
-require('dotenv').load();
+require('dotenv').config();
 var express  = require('express');
 var app      = express();
 var passport = require('passport');
@@ -6,6 +6,7 @@ var port     = process.env.PORT || 8080;
 var secret = process.env.SECRET;
 var flash    = require('connect-flash');
 var mongoose = require('mongoose');
+app.set( 'port', ( port || 5000 ));
 
 // configuration ===============================================================
 mongoose.connect(process.env.MONGOLAB_URI); // connect to our database
