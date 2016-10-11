@@ -6,7 +6,6 @@ var port     = process.env.PORT || 8080;
 var secret = process.env.SECRET;
 var flash    = require('connect-flash');
 var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
 
 // configuration ===============================================================
 mongoose.connect(process.env.MONGOLAB_URI); // connect to our database
