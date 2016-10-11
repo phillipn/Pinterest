@@ -6,11 +6,10 @@ var port     = process.env.PORT || 8080;
 var secret = process.env.SECRET;
 var flash    = require('connect-flash');
 var mongoose = require('mongoose');
-
-var configDB = require('./config/database.js');
+var bodyParser = require('body-Parser');
 
 // configuration ===============================================================
-mongoose.connect(configDB.url); // connect to our database
+mongoose.connect(process.env.MONGOLAB_URI); // connect to our database
 
 require('./config/passport')(passport); // pass passport for configuration
 
