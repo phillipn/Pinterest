@@ -8,5 +8,6 @@ module.exports = {
 		'consumerSecret' 	: 'wGjYSbAtQijS2kg53mauMVMQJcBfAqQrgHLnwEVE3dwSEitVap',
 		'callbackURL' 		: 'http://localhost:8080/auth/twitter/callback'
 	}
+	// Must change callbackUrl in order to display on heroku
 
 };

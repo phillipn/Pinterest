@@ -1,32 +1,41 @@
-// require('dotenv').config(); // remove for heroku
+require('dotenv').config(); // remove for heroku
 var express  = require('express');
+var path = require('path');
 var app      = express();
 var passport = require('passport');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 var port     = process.env.PORT || 8080;
-var secret = process.env.SECRET;
+var session = require('express-session');
 var flash    = require('connect-flash');
 var mongoose = require('mongoose');
+var routes = require('./app_server/routes.js');
 
 require('./app_api/models/db');
 require('./config/passport')(passport); // pass passport for configuration
 
-app.configure(function() {
+app.set('views', path.join(__dirname, 'app_server', 'views'));
+app.set('view engine', 'ejs'); // set up ejs for templating
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'app_client')));
 
-	// set up our express application
-	app.use(express.logger('dev')); // log every request to the console
-	app.use(express.cookieParser('secret')); // read cookies (needed for auth)
-	app.use(express.bodyParser()); // get information from html forms
+app.use(session({
+	secret: 'secretClementine',
+	resave: false,
+	saveUninitialized: true
+}));
 
-	app.set('view engine', 'ejs'); // set up ejs for templating
-	app.use(express.session()); // session secret
-	app.use(passport.initialize());
-	app.use(passport.session()); // persistent login sessions
-	app.use(flash()); // use connect-flash for flash messages stored in session
-});
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
 
-// routes ======================================================================
-require('./app_server/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+app.use('/', routes);
 
 // launch ======================================================================
 app.listen(port);
 console.log('The magic happens on port ' + port);
+
+module.exports = app;
