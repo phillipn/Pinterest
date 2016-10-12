@@ -7,4 +7,4 @@ var pictureSchema = mongoose.Schema({
   likes: [String]
 });
 
-module.exports = mongoose.model('Picture', pictureSchema);
+mongoose.model('Picture', pictureSchema);

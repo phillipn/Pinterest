@@ -5,14 +5,34 @@
     </div>
     <div id="navbar-main" class="navbar-collapse collapse">
       <ul ng-if="navvm.user" class="nav navbar-nav">
-        <li class="nav-item active">
+        <li ng-click="navvm.getAllPics()" class="nav-item">
           <a class="nav-link" href="#">All Pics</a>
         </li>
-        <li class="nav-item">
+        <li ng-click="navvm.getUserPics(navvm.user.twitter.displayName)" class="nav-item">
           <a class="nav-link" href="#">Your Pics</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Add Pic</a>
+        <li class="dropdown">
+          <a ng-click="navvm.removeAlerts()" class="dropdown-toggle" data-toggle="dropdown" href="#">Add Pic<span class="caret"></span></a>
+          <ul class="dropdown-menu" id="form-menu" role="menu">
+            <form ng-submit="navvm.postPic(navvm.formData)">
+              <li class="form-group">
+                <label for="text">Title</label>
+                <input type="text" class="form-control" ng-model="navvm.formData.title">
+              </li>
+              <li class="form-group">
+                <label for="text">Image Url</label>
+                <input type="text" class="form-control" ng-model="navvm.formData.image_url">
+              </li>
+              <li>
+                <input class="btn btn-primary" type='submit' value='Submit'>
+              </li>
+            </form>
+            <li id="imagePreview">
+              <div class="alert-danger" ng-show="navvm.imageError">{{ navvm.imageError }}</div>
+              <div class="alert-success" ng-show="navvm.imageSent">{{ navvm.imageSent }}</div>
+              <img ng-src='{{ navvm.formData.image_url }}' default-image="http://www.novelupdates.com/img/noimagefound.jpg">
+            </li>
+          </ul>
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">

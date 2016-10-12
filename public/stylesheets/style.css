@@ -1,0 +1,11 @@
+img {
+  max-height: 200px;
+  max-width: 200px;
+}
+#form-menu {
+  min-width: 300px;
+  padding: 15px 20px;
+}
+#imagePreview {
+  text-align: center;
+}
