@@ -3,8 +3,6 @@ var router = express.Router();
 var passport = require('passport');
 var dashController = require('./controllers/dashController.js');
 
-router.get('/', dashController.getDashboard);
-
 router.get('/auth/twitter', passport.authenticate('twitter'));
 
 // handle the callback after twitter has authenticated the user

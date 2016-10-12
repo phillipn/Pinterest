@@ -1,7 +1,9 @@
 require('dotenv').config(); // remove for heroku
 var express  = require('express');
+var expose = require('express-expose');
 var path = require('path');
 var app      = express();
+
 var passport = require('passport');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -33,6 +35,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', routes);
+
+app.use(function (req, res, next) {
+  if (req.isAuthenticated()) res.expose(req.user, 'user');
+  next ();
+});
+
+app.use(function(req, res) {
+  res.sendFile(path.join(__dirname, 'app_client', 'index.html'));
+});
 
 // launch ======================================================================
 app.listen(port);
