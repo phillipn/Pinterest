@@ -4,11 +4,29 @@
     .module('pictureApp')
     .controller('navbarController', navbarController);
 
-  function navbarController($window) {
+  function navbarController(authentication) {
     var vm = this;
+    vm.user = '';
 
-    vm.user = window.user;
-    console.log(vm.user);
+    authentication.getCurrentUser()
+      .success(function(data){
+        console.log(data);
+        vm.user = data;
+      })
+      .error(function(err){
+        console.log(err);
+      })
+
+    vm.logout = function(){
+      authentication.logout()
+        .success(function(data){
+          console.log(data);
+          vm.user = data;
+        })
+        .error(function(err){
+          console.log(err);
+        })
+    }
 
   }
 
