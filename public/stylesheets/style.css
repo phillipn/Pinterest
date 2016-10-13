@@ -10,10 +10,12 @@ img {
   text-align: center;
 }
 .grid-item {
-  background: white;
+  background: #ffe6ff;
+  padding: 10px;
   margin: 3px;
   display: inline-block;
-  border: 3px solid red;
+  border: 6px solid white;
+  box-shadow: 2px 2px 5px rgba(102, 102, 102, 0.5);
 }
 .grid {
   margin-top:70px;
@@ -21,7 +23,15 @@ img {
 }
 body {
   text-align: center;
-  background: #CCCCCC;
+  background: #e6eeff;
+  font-family: cursive;
+}
+.navbar-default {
+  background: #ffe6ff;
+  border-color: white;
+}
+a {
+  color: black !important;
 }
 #signIn {
   margin-top: 4px;
@@ -33,10 +43,14 @@ footer {
   left: 0;
   width: 100%;
   padding: 20px;
-  background: #F8F8F8;
+  background: #ffe6ff;
+  border: 1px solid white;
 }
-.fa-times, .fa-heart-o, .fa-heart {
+.fa-heart-o, .fa-heart {
   color: red;
+}
+.fa-times {
+  color: white;
 }
 .active {
   color: white !important;

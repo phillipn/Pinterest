@@ -18,15 +18,20 @@
       return $http.post('/api/pictures/', formData);
     }
 
-    toggleLike = function(pictureId, likeObj){
+    toggleLikes = function(pictureId, likeObj){
       return $http.put('/api/pictures/' + pictureId, likeObj);
+    }
+
+    deletePicture = function(pictureId){
+      return $http.delete('/api/pictures/' + pictureId);
     }
 
     return {
       getAllPics: getAllPics,
       getUserPics: getUserPics,
       postPic: postPic,
-      toggleLike: toggleLike
+      toggleLikes: toggleLikes,
+      deletePicture: deletePicture
     }
   }
 

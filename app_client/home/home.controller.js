@@ -85,18 +85,30 @@
       }
     }
 
-    vm.toggleLike = function(picture){
+    vm.toggleLikes = function(picture, index){
+      console.log((picture.likes).indexOf(vm.user.twitter.displayName));
       if((picture.likes).indexOf(vm.user.twitter.displayName) !== -1){
-        picture.like.length -= 1;
+        picture.likes.length -= 1;
         var likeObj = {like: false};
       } else {
-        picture.like.length += 1;
+        picture.likes.length += 1;
         var likeObj = {like: true};
       }
 
-      pictureData.toggleLike(picture._id, likeObj)
+      pictureData.toggleLikes(picture._id, likeObj)
         .success(function(data){
-          console.log(data);
+          vm.pictures[index] = data;
+        })
+        .error(function(err){
+          console.log(err);
+        })
+    }
+
+    vm.deletePicture = function(pictureId, index){
+      console.log(index);
+      pictureData.deletePicture(pictureId)
+        .success(function(data){
+          vm.userPictures[index] = data;
         })
         .error(function(err){
           console.log(err);

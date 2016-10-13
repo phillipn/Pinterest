@@ -56,20 +56,20 @@
   </div>
 
 <!-- End of Navbar -->
-  <div class='grid' data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
-    <div class='grid-item' ng-repeat="picture in vm.pictures">
+  <div class='grid'>
+    <div class='grid-item' ng-repeat="picture in vm.pictures track by $index">
       <p class="imgTitle">{{ picture.title }}</h5><br>
       <img src="{{ picture.image_url }}">
       <h5 class="imgUser">{{ picture.userName }}</h5>
-      <button class='btn btn-default' ng-if="vm.user" class="imgLikes">{{ picture.likes.length }} <i ng-class='vm.userLikes(picture) ? "fa fa-heart" : "fa fa-heart-o"' aria-hidden="true"></i></button>
+      <button class='btn btn-default' ng-if="vm.user" ng-click="vm.toggleLikes(picture, $index)" class="imgLikes">{{ picture.likes.length }} <i ng-class='vm.userLikes(picture) ? "fa fa-heart" : "fa fa-heart-o"' aria-hidden="true"></i></button>
   </div>
-  <div class='grid' data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
-    <div class='grid-item' ng-repeat="picture in vm.userPictures">
+  <div class='grid'>
+    <div class='grid-item' ng-repeat="picture in vm.userPictures track by $index" ng-if="picture">
       <p class="imgTitle">{{ picture.title }}</h5><br>
       <img src="{{ picture.image_url }}">
       <h5 class="imgUser">{{ picture.userName }}</h5>
-      <h5 class="imgLikes">{{ picture.likes.length }}</h5>
-      <button class='btn btn-default'><i class="fa fa-times" aria-hidden="true"> Delete</i></button>
+      <h5 class="imgLikes">{{ picture.likes.length }} Likes</h5>
+      <button ng-click="vm.deletePicture(picture._id, $index)" class='btn btn-danger'><i class="fa fa-times" aria-hidden="true"> Delete</i></button>
     </div>
   </div>
   <footer-generic></footer-generic>
