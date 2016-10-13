@@ -15,7 +15,6 @@
     }
 
     postPic = function(formData){
-      console.log('service with ' + formData);
       return $http.post('/api/pictures/', formData);
     }
 

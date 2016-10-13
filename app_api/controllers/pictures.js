@@ -19,7 +19,7 @@ module.exports.getAllPics = function(req, res){
 
 module.exports.getUserPics = function(req, res){
   var userName = req.params.userName;
-  console.log(user);
+  console.log(userName);
   Picture.find({userName: userName}).exec(function(err, pics){
     if(err){
       console.log(err);

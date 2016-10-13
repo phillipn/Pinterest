@@ -1,4 +1,65 @@
 <div class="container">
-  <navbar></navbar>
+  
+  <!-- Start of Navbar -->
+
+  <div class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header"><a href="/#/" class="navbar-brand">Pint-erest</a>
+        <button type="button" data-toggle="collapse" data-target="#navbar-main" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+      </div>
+      <div id="navbar-main" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li ng-click="vm.getAllPics()" class="nav-item">
+            <a class="nav-link" href="#">All Pics</a>
+          </li>
+          <li ng-if="vm.user" ng-click="vm.getUserPics(vm.user.twitter.displayName)" class="nav-item">
+            <a class="nav-link" href="#">Your Pics</a>
+          </li>
+          <li ng-if="vm.user" class="dropdown">
+            <a ng-click="vm.removeAlerts()" class="dropdown-toggle" data-toggle="dropdown" href="#">Add Pic<span class="caret"></span></a>
+            <ul class="dropdown-menu" id="form-menu" role="menu">
+              <form ng-submit="vm.postPic(vm.formData)">
+                <li class="form-group">
+                  <label for="text">Title</label>
+                  <input type="text" class="form-control" ng-model="vm.formData.title">
+                </li>
+                <li class="form-group">
+                  <label for="url">Image Url</label>
+                  <input id='urlInput' type="url" class="form-control" ng-model="vm.formData.image_url">
+                </li>
+                <li>
+                  <input class="btn btn-primary" type='submit' value='Submit'>
+                </li>
+              </form>
+              <li id="imagePreview">
+                <div class="alert-danger" ng-show="vm.imageError">{{ vm.imageError }}</div>
+                <div class="alert-success" ng-show="vm.imageSent">{{ vm.imageSent }}</div>
+                <img id='actualImage' ng-model="vm.brokenLink" src='{{ vm.formData.image_url }}' default-image="http://www.novelupdates.com/img/noimagefound.jpg">
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li ng-if="vm.user" class="dropdown">
+            <a href="" class="dropdown-toggle" data-toggle="dropdown">{{ vm.user.twitter.displayName }}<span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="/profile">Profile</a></li>
+              <li><a ng-click="vm.logout()" href="">Logout</a></li>
+            </ul>
+          </li>
+          <li ng-if="!vm.user">
+            <a class='btn btn-default' href="/auth/twitter"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i> Sign in</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+<!-- End of Navbar -->
+
+  <div ng-repeat="picture in vm.pictures">
+    <h5>{{ picture.title }}</h5>
+    <img src="{{ picture.image_url }}">
+  </div>
   <footer-generic></footer-generic>
 </div>

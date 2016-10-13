@@ -7,9 +7,11 @@
   function defaultImage () {
     return {
       restrict:'A',
-      link: function(scope, element, attr) {
+      require: 'ngModel',
+      link: function(scope, element, attr, ngModel) {
         element.on('error', function() {
           element.attr('src', attr.defaultImage);
+          ngModel.$setViewValue(true);
         })
       }
     }
