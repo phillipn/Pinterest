@@ -18,10 +18,15 @@
       return $http.post('/api/pictures/', formData);
     }
 
+    toggleLike = function(pictureId, likeObj){
+      return $http.put('/api/pictures/' + pictureId, likeObj);
+    }
+
     return {
       getAllPics: getAllPics,
       getUserPics: getUserPics,
-      postPic: postPic
+      postPic: postPic,
+      toggleLike: toggleLike
     }
   }
 

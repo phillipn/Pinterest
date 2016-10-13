@@ -9,5 +9,6 @@ router.delete('/user', ctrlAuth.logout);
 router.get('/pictures', ctrlPics.getAllPics);
 router.get('/pictures/:userName', ctrlPics.getUserPics);
 router.post('/pictures', ctrlPics.postPic);
+router.put('/pictures/:pictureId', ctrlPics.updateLikes);
 
 module.exports = router;

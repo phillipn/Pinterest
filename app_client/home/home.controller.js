@@ -7,6 +7,21 @@
   function homeController(authentication, pictureData){
     var vm = this;
 
+    vm.selectedIndex = -1; // Whatever the default selected index is, use -1 for no selection
+
+    vm.allPicsLinkEmph = true;
+    vm.userPicsLinkEmph = false;
+
+    vm.emphasize = function(input){
+      if(input === 'allPicsLink'){
+        vm.allPicsLinkEmph = true;
+        vm.userPicsLinkEmph = false;
+      } else {
+        vm.allPicsLinkEmph = false;
+        vm.userPicsLinkEmph = true;
+      }
+    }
+
     vm.user = '';
 
     vm.formData = {};
@@ -21,18 +36,20 @@
     vm.getAllPics = function(){
       pictureData.getAllPics()
         .success(function(data){
+          vm.userPictures = [];
           vm.pictures = data;
-          console.log(data);
         })
         .error(function(err){
           console.log(err);
         })
     }
+    vm.getAllPics();
 
     vm.getUserPics = function(userName){
       pictureData.getUserPics(userName)
         .success(function(data){
-          console.log(data);
+          vm.pictures = [];
+          vm.userPictures = data;
         })
         .error(function(err){
           console.log(err);
@@ -58,6 +75,32 @@
             console.log(err);
         })
       }
+    }
+
+    vm.userLikes = function(picture){
+      if((picture.likes).indexOf(vm.user.twitter.displayName) !== -1){
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    vm.toggleLike = function(picture){
+      if((picture.likes).indexOf(vm.user.twitter.displayName) !== -1){
+        picture.like.length -= 1;
+        var likeObj = {like: false};
+      } else {
+        picture.like.length += 1;
+        var likeObj = {like: true};
+      }
+
+      pictureData.toggleLike(picture._id, likeObj)
+        .success(function(data){
+          console.log(data);
+        })
+        .error(function(err){
+          console.log(err);
+        })
     }
 
     vm.logout = function(){

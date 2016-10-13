@@ -1,5 +1,5 @@
 <div class="container">
-  
+
   <!-- Start of Navbar -->
 
   <div class="navbar navbar-default navbar-fixed-top">
@@ -9,10 +9,10 @@
       </div>
       <div id="navbar-main" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li ng-click="vm.getAllPics()" class="nav-item">
+          <li ng-class="{active: vm.allPicsLinkEmph}" ng-click="vm.getAllPics(); vm.emphasize('allPicsLink')" class="nav-item">
             <a class="nav-link" href="#">All Pics</a>
           </li>
-          <li ng-if="vm.user" ng-click="vm.getUserPics(vm.user.twitter.displayName)" class="nav-item">
+          <li ng-if="vm.user" ng-class="{active: vm.userPicsLinkEmph}" ng-click="vm.getUserPics(vm.user.twitter.displayName); vm.emphasize('userPicsLink')" class="nav-item">
             <a class="nav-link" href="#">Your Pics</a>
           </li>
           <li ng-if="vm.user" class="dropdown">
@@ -48,7 +48,7 @@
             </ul>
           </li>
           <li ng-if="!vm.user">
-            <a class='btn btn-default' href="/auth/twitter"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i> Sign in</a>
+            <a class='btn btn-default' id="signIn" href="/auth/twitter"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i> Sign in</a>
           </li>
         </ul>
       </div>
@@ -56,10 +56,21 @@
   </div>
 
 <!-- End of Navbar -->
-
-  <div ng-repeat="picture in vm.pictures">
-    <h5>{{ picture.title }}</h5>
-    <img src="{{ picture.image_url }}">
+  <div class='grid' data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
+    <div class='grid-item' ng-repeat="picture in vm.pictures">
+      <p class="imgTitle">{{ picture.title }}</h5><br>
+      <img src="{{ picture.image_url }}">
+      <h5 class="imgUser">{{ picture.userName }}</h5>
+      <button class='btn btn-default' ng-if="vm.user" class="imgLikes">{{ picture.likes.length }} <i ng-class='vm.userLikes(picture) ? "fa fa-heart" : "fa fa-heart-o"' aria-hidden="true"></i></button>
+  </div>
+  <div class='grid' data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 200 }'>
+    <div class='grid-item' ng-repeat="picture in vm.userPictures">
+      <p class="imgTitle">{{ picture.title }}</h5><br>
+      <img src="{{ picture.image_url }}">
+      <h5 class="imgUser">{{ picture.userName }}</h5>
+      <h5 class="imgLikes">{{ picture.likes.length }}</h5>
+      <button class='btn btn-default'><i class="fa fa-times" aria-hidden="true"> Delete</i></button>
+    </div>
   </div>
   <footer-generic></footer-generic>
 </div>

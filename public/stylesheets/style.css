@@ -9,3 +9,36 @@ img {
 #imagePreview {
   text-align: center;
 }
+.grid-item {
+  background: white;
+  margin: 3px;
+  display: inline-block;
+  border: 3px solid red;
+}
+.grid {
+  margin-top:70px;
+  margin-bottom: 80px;
+}
+body {
+  text-align: center;
+  background: #CCCCCC;
+}
+#signIn {
+  margin-top: 4px;
+  padding: 10px;
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  background: #F8F8F8;
+}
+.fa-times, .fa-heart-o, .fa-heart {
+  color: red;
+}
+.active {
+  color: white !important;
+  background: black !important;
+}

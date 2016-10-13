@@ -1,6 +1,6 @@
 (function(){
   angular
-    .module('pictureApp', ['ui.router', 'ngAnimate'])
+    .module('pictureApp', ['ui.router'])
 
   function config($stateProvider, $urlRouterProvider){
     $stateProvider

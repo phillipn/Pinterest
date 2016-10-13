@@ -48,3 +48,10 @@ module.exports.postPic = function(req, res){
     sendJSONresponse(res, 201, pic);
   });
 }
+
+module.exports.updateLikes = function(req, res){
+  var pictureId = req.params.pictureId;
+  var likeObj = req.body;
+  console.log(pictureId);
+  console.log(likeObj);
+}
