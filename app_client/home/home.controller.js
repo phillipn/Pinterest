@@ -34,6 +34,8 @@
     }
 
     vm.getAllPics = function(){
+      vm.allPics = true;
+      vm.userPics = false;
       pictureData.getAllPics()
         .success(function(data){
           vm.userPictures = [];
@@ -44,8 +46,11 @@
         })
     }
     vm.getAllPics();
+    vm.allPics = true;
 
     vm.getUserPics = function(userName){
+      vm.allPics = false;
+      vm.userPics = true;
       pictureData.getUserPics(userName)
         .success(function(data){
           vm.pictures = [];

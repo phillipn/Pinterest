@@ -1,6 +1,6 @@
 (function(){
   angular
-    .module('pictureApp', ['ui.router'])
+    .module('pictureApp', ['ui.router', 'wu.masonry'])
 
   function config($stateProvider, $urlRouterProvider){
     $stateProvider

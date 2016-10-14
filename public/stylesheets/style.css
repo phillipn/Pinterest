@@ -1,6 +1,9 @@
 img {
-  max-height: 200px;
-  max-width: 200px;
+  width: 150px;
+}
+.imgTitle{
+  margin-top: 0px;
+  margin-bottom: -10px;
 }
 #form-menu {
   min-width: 300px;
@@ -9,17 +12,19 @@ img {
 #imagePreview {
   text-align: center;
 }
-.grid-item {
+.masonry-brick {
+  width: 200px;
   background: #ffe6ff;
   padding: 10px;
   margin: 3px;
-  display: inline-block;
   border: 6px solid white;
   box-shadow: 2px 2px 5px rgba(102, 102, 102, 0.5);
 }
-.grid {
-  margin-top:70px;
-  margin-bottom: 80px;
+.grid{
+  position:relative;
+  margin:0 auto;
+  margin-top: 100px;
+  margin-bottom: 100px;
 }
 body {
   text-align: center;
@@ -41,8 +46,8 @@ footer {
   position: fixed;
   bottom: 0;
   left: 0;
-  width: 100%;
   padding: 20px;
+  width: 100%;
   background: #ffe6ff;
   border: 1px solid white;
 }

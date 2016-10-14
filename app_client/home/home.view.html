@@ -56,16 +56,17 @@
   </div>
 
 <!-- End of Navbar -->
-  <div class='grid'>
-    <div class='grid-item' ng-repeat="picture in vm.pictures track by $index">
-      <p class="imgTitle">{{ picture.title }}</h5><br>
+  <div masonry masonry-options="{ isFitWidth: true}" ng-if="vm.allPics" class='grid'>
+    <div class='masonry-brick' ng-repeat="picture in vm.pictures track by $index">
+      <h4 class="imgTitle">{{ picture.title }}</h4><br>
       <img src="{{ picture.image_url }}">
       <h5 class="imgUser">{{ picture.userName }}</h5>
       <button class='btn btn-default' ng-if="vm.user" ng-click="vm.toggleLikes(picture, $index)" class="imgLikes">{{ picture.likes.length }} <i ng-class='vm.userLikes(picture) ? "fa fa-heart" : "fa fa-heart-o"' aria-hidden="true"></i></button>
+    </div>
   </div>
-  <div class='grid'>
-    <div class='grid-item' ng-repeat="picture in vm.userPictures track by $index" ng-if="picture">
-      <p class="imgTitle">{{ picture.title }}</h5><br>
+  <div masonry masonry-options="{ isFitWidth: true}" ng-if="vm.userPics" class='grid'>
+    <div class='masonry-brick' ng-repeat="picture in vm.userPictures track by $index" ng-if="picture">
+      <h4 class="imgTitle">{{ picture.title }}</h4><br>
       <img src="{{ picture.image_url }}">
       <h5 class="imgUser">{{ picture.userName }}</h5>
       <h5 class="imgLikes">{{ picture.likes.length  | likeFilter}}</h5>
