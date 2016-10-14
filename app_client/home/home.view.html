@@ -68,7 +68,7 @@
       <p class="imgTitle">{{ picture.title }}</h5><br>
       <img src="{{ picture.image_url }}">
       <h5 class="imgUser">{{ picture.userName }}</h5>
-      <h5 class="imgLikes">{{ picture.likes.length }} Likes</h5>
+      <h5 class="imgLikes">{{ picture.likes.length  | likeFilter}}</h5>
       <button ng-click="vm.deletePicture(picture._id, $index)" class='btn btn-danger'><i class="fa fa-times" aria-hidden="true"> Delete</i></button>
     </div>
   </div>
