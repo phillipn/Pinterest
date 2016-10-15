@@ -11,6 +11,8 @@ img {
 }
 #imagePreview {
   text-align: center;
+}
+#actualImage {
   border: 1px solid black;
 }
 .masonry-brick {

@@ -19,7 +19,6 @@ module.exports.getAllPics = function(req, res){
 
 module.exports.getUserPics = function(req, res){
   var userName = req.params.userName;
-  console.log(userName);
   Picture.find({userName: userName}).exec(function(err, pics){
     if(err){
       console.log(err);
@@ -32,7 +31,6 @@ module.exports.getUserPics = function(req, res){
 
 module.exports.postPic = function(req, res){
   var picData = req.body;
-  console.log(picData);
 
   Picture.create({
     title: picData.title,

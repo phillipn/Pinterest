@@ -7,9 +7,17 @@ router.get('/user', ctrlAuth.getUser);
 router.delete('/user', ctrlAuth.logout);
 
 router.get('/pictures', ctrlPics.getAllPics);
-router.post('/pictures', ctrlPics.postPic);
-router.get('/pictures/:userName', ctrlPics.getUserPics);
-router.put('/pictures/:pictureId', ctrlPics.updateLikes);
-router.delete('/pictures/:pictureId', ctrlPics.deletePic);
+router.post('/pictures', loggedIn, ctrlPics.postPic);
+router.get('/pictures/:userName', loggedIn, ctrlPics.getUserPics);
+router.put('/pictures/:pictureId', loggedIn, ctrlPics.updateLikes);
+router.delete('/pictures/:pictureId', loggedIn, ctrlPics.deletePic);
+
+function loggedIn(req, res, next) {
+  if (req.user) {
+    next();
+  } else {
+    res.redirect('/');
+  }
+}
 
 module.exports = router;

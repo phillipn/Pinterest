@@ -12,7 +12,9 @@
         element.on('error', function() {
           element.attr('src', attr.defaultImage);
           ngModel.$setViewValue(true);
+          return;
         })
+        ngModel.$setViewValue(false);
       }
     }
   }

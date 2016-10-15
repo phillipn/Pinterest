@@ -60,7 +60,6 @@
     }
 
     vm.postPic = function(formData){
-      vm.brokenLink = false;
       if(!formData.image_url || !formData.title){
         vm.imageSent = false;
         vm.imageError = "Please enter a title and image url";
@@ -90,7 +89,6 @@
     }
 
     vm.toggleLikes = function(picture, index){
-      console.log((picture.likes).indexOf(vm.user.twitter.displayName));
       if((picture.likes).indexOf(vm.user.twitter.displayName) !== -1){
         picture.likes.length -= 1;
         var likeObj = {like: false};
@@ -109,7 +107,6 @@
     }
 
     vm.deletePicture = function(pictureId, index){
-      console.log(index);
       pictureData.deletePicture(pictureId)
         .success(function(data){
           vm.userPictures[index] = data;
@@ -122,8 +119,8 @@
     vm.logout = function(){
       authentication.logout()
         .success(function(data){
-          console.log(data);
           vm.user = data;
+          vm.getAllPics();
         })
         .error(function(err){
           console.log(err);
