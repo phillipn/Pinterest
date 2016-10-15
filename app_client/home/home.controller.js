@@ -26,8 +26,6 @@
 
     vm.formData = {};
 
-    vm.brokenLink = false;
-
     vm.removeAlerts = function(){
       vm.imageError = false;
       vm.imageSent = false;
@@ -62,6 +60,7 @@
     }
 
     vm.postPic = function(formData){
+      vm.brokenLink = false;
       if(!formData.image_url || !formData.title){
         vm.imageSent = false;
         vm.imageError = "Please enter a title and image url";

@@ -34,7 +34,7 @@
               <li id="imagePreview">
                 <div class="alert-danger" ng-show="vm.imageError">{{ vm.imageError }}</div>
                 <div class="alert-success" ng-show="vm.imageSent">{{ vm.imageSent }}</div>
-                <img id='actualImage' ng-model="vm.brokenLink" src='{{ vm.formData.image_url }}' default-image="http://www.novelupdates.com/img/noimagefound.jpg">
+                <img ng-if="vm.formData.image_url" id='actualImage' ng-model="vm.brokenLink" src='{{ vm.formData.image_url }}' default-image="http://www.novelupdates.com/img/noimagefound.jpg">
               </li>
             </ul>
           </li>
