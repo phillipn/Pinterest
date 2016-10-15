@@ -68,8 +68,9 @@
           formData.image_url = "http://www.novelupdates.com/img/noimagefound.jpg";
         }
         pictureData.postPic(formData)
-          .success(function(data){
-            vm.pictures.push(data);
+          .success(function(pic){
+            vm.pictures.push(pic);
+            vm.userPictures.push(pic);
             vm.formData = {};
             vm.imageError = false;
             vm.imageSent = "Image submitted";
