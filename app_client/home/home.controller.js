@@ -8,9 +8,13 @@
     var vm = this;
 
     vm.selectedIndex = -1; // Whatever the default selected index is, use -1 for no selection
-
     vm.allPicsLinkEmph = true;
     vm.userPicsLinkEmph = false;
+    vm.user = '';
+    vm.formData = {};
+    vm.allPics = true;
+    vm.pictures = [];
+    vm.userPictures = [];
 
     vm.emphasize = function(input){
       if(input === 'allPicsLink'){
@@ -22,10 +26,6 @@
       }
     }
 
-    vm.user = '';
-
-    vm.formData = {};
-
     vm.removeAlerts = function(){
       vm.imageError = false;
       vm.imageSent = false;
@@ -35,28 +35,26 @@
       vm.allPics = true;
       vm.userPics = false;
       pictureData.getAllPics()
-        .success(function(data){
+        .then(function(response){
           vm.userPictures = [];
-          vm.pictures = data;
+          vm.pictures = response.data;
         })
-        .error(function(err){
-          console.log(err);
+        .catch(function(response){
+          console.log(response.data);
         })
     }
-    vm.getAllPics();
-    vm.allPics = true;
 
     vm.getUserPics = function(userName){
       vm.allPics = false;
       vm.userPics = true;
       pictureData.getUserPics(userName)
-        .success(function(data){
+        .then(function(response){
           vm.pictures = [];
-          vm.userPictures = data;
+          vm.userPictures = response.data;
         })
-        .error(function(err){
-          console.log(err);
-        })
+        .catch(function(response){
+          console.log(response.data);
+        });
     }
 
     vm.postPic = function(formData){
@@ -68,16 +66,16 @@
           formData.image_url = "http://www.novelupdates.com/img/noimagefound.jpg";
         }
         pictureData.postPic(formData)
-          .success(function(pic){
-            vm.pictures.push(pic);
-            vm.userPictures.push(pic);
+          .then(function(response){
+            vm.pictures.push(response.data);
+            vm.userPictures.push(response.data);
             vm.formData = {};
             vm.imageError = false;
             vm.imageSent = "Image submitted";
           })
-          .error(function(err){
-            console.log(err);
-        })
+          .catch(function(response){
+            console.log(response.data);
+          })
       }
     }
 
@@ -99,41 +97,45 @@
       }
 
       pictureData.toggleLikes(picture._id, likeObj)
-        .success(function(data){
-          vm.pictures[index] = data;
+        .then(function(response){
+          vm.pictures[index] = response.data;
         })
-        .error(function(err){
-          console.log(err);
+        .catch(function(response){
+          console.log(response.data);
         })
     }
 
     vm.deletePicture = function(pictureId, index){
       pictureData.deletePicture(pictureId)
-        .success(function(data){
-          vm.userPictures[index] = data;
+        .then(function(response){
+          vm.userPictures[index] = response.data;
         })
-        .error(function(err){
-          console.log(err);
+        .catch(function(response){
+          console.log(response.data);
         })
     }
 
     vm.logout = function(){
       authentication.logout()
-        .success(function(data){
-          vm.user = data;
+        .then(function(response){
+          vm.user = response.data;
           vm.getAllPics();
         })
-        .error(function(err){
-          console.log(err);
+        .catch(function(response){
+          console.log(response.data);
         })
     }
 
+// INIT
+
+    vm.getAllPics();
+
     authentication.getCurrentUser()
-      .success(function(data){
-        vm.user = data;
-      })
-      .error(function(err){
-        console.log(err);
+      .then(function(response){
+        console.log(response.data);
+        vm.user = response.data;
+      }, function(response){
+        console.log(response);
       })
   }
 })();
