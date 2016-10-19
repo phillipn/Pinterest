@@ -43,4 +43,8 @@ app.use(function(req, res) {
 app.listen(port);
 console.log('The magic happens on port ' + port);
 
+exports.closeServer = function(){
+  server.close();
+};
+
 module.exports = app;

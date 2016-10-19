@@ -6,7 +6,7 @@
     $stateProvider
       .state('/', {
         url: '/',
-        templateUrl: '/home/home.view.html',
+        templateUrl: 'home/home.view.html',
         controller: 'homeController as vm'
       })
     $urlRouterProvider.otherwise('/');

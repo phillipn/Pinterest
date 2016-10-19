@@ -25,6 +25,9 @@ module.exports.getUserPics = function(req, res){
       sendJSONresponse(res, 404, err);
       return;
     }
+    if(!pics){
+      sendJSONresponse(res, 404, "No pics");
+    }
     sendJSONresponse(res, 200, pics);
   })
 }

@@ -1,5 +1,5 @@
 describe('homeController', function() {
-  var $controller, $q, pictureData, authentication, scope, def, pictureService, homeController;
+  var $controller, $q, authentication, scope, def, pictureService, homeController;
 
   var API = "http://localhost:8080/api/pictures";
 
@@ -92,6 +92,10 @@ describe('homeController', function() {
 
   beforeEach(angular.mock.module('pictureApp'));
   beforeEach(angular.mock.module('ui.router'));
+
+  beforeEach(module(function($urlRouterProvider) {
+    $urlRouterProvider.deferIntercept();
+  }));
 
   beforeEach(function(){
     pictureService = {

@@ -34,7 +34,7 @@
               <li id="imagePreview">
                 <div class="alert-danger" ng-show="vm.imageError">{{ vm.imageError }}</div>
                 <div class="alert-success" ng-show="vm.imageSent">{{ vm.imageSent }}</div>
-                <img ng-if="vm.formData.image_url" id='actualImage' ng-model="vm.brokenLink" src='{{ vm.formData.image_url }}' default-image="http://www.novelupdates.com/img/noimagefound.jpg">
+                <img ng-if="vm.formData.image_url" id='actualImage' ng-model="vm.brokenLink" src='{{ vm.formData.image_url }}' default-image>
               </li>
             </ul>
           </li>
@@ -58,7 +58,7 @@
   <div masonry masonry-options="{ isFitWidth: true}" ng-if="vm.allPics" class='grid'>
     <div class='masonry-brick' ng-repeat="picture in vm.pictures track by $index">
       <h4 class="imgTitle">{{ picture.title }}</h4><br>
-      <img src="{{ picture.image_url }}">
+      <img src="{{ picture.image_url }}" default-image>
       <h5 class="imgUser">{{ picture.userName }}</h5>
       <button class='btn btn-default' ng-if="vm.user" ng-click="vm.toggleLikes(picture, $index)" class="imgLikes">{{ picture.likes.length }} <i ng-class='vm.userLikes(picture) ? "fa fa-heart" : "fa fa-heart-o"' aria-hidden="true"></i></button>
     </div>
@@ -66,7 +66,7 @@
   <div masonry masonry-options="{ isFitWidth: true}" ng-if="vm.userPics" class='grid'>
     <div class='masonry-brick' ng-repeat="picture in vm.userPictures track by $index" ng-if="picture">
       <h4 class="imgTitle">{{ picture.title }}</h4><br>
-      <img src="{{ picture.image_url }}">
+      <img src="{{ picture.image_url }}" default-image>
       <h5 class="imgUser">{{ picture.userName }}</h5>
       <h5 class="imgLikes">{{ picture.likes.length  | likeFilter}}</h5>
       <button ng-click="vm.deletePicture(picture._id, $index)" class='btn btn-danger'><i class="fa fa-times" aria-hidden="true"> Delete</i></button>

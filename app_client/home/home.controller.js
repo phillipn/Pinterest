@@ -6,16 +6,9 @@
 
   function homeController(authentication, pictureData){
     var vm = this;
-
-    vm.selectedIndex = -1; // Whatever the default selected index is, use -1 for no selection
-    vm.allPicsLinkEmph = true;
-    vm.userPicsLinkEmph = false;
-    vm.user = '';
-    vm.formData = {};
-    vm.allPics = true;
-    vm.pictures = [];
-    vm.userPictures = [];
-
+    vm.onError = function(){
+      console.log('error');
+    }
     vm.emphasize = function(input){
       if(input === 'allPicsLink'){
         vm.allPicsLinkEmph = true;
@@ -58,9 +51,12 @@
     }
 
     vm.postPic = function(formData){
+      console.log('vm.postPic entered');
       if(!formData.image_url || !formData.title){
+        console.log('no formData');
         vm.imageSent = false;
         vm.imageError = "Please enter a title and image url";
+        return false;
       } else {
         if(vm.brokenLink){
           formData.image_url = "http://www.novelupdates.com/img/noimagefound.jpg";
@@ -126,16 +122,24 @@
         })
     }
 
-// INIT
+    vm.init = function(){
+      vm.selectedIndex = -1; // Whatever the default selected index is, use -1 for no selection
+      vm.allPicsLinkEmph = true;
+      vm.userPicsLinkEmph = false;
+      vm.user = '';
+      vm.formData = {};
+      vm.allPics = true;
+      vm.pictures = [];
+      vm.userPictures = [];
+      vm.getAllPics();
+      authentication.getCurrentUser()
+        .then(function(response){
+          vm.user = response.data;
+        }, function(response){
+          console.log(response.data);
+        })
+      }
 
-    vm.getAllPics();
-
-    authentication.getCurrentUser()
-      .then(function(response){
-        console.log(response.data);
-        vm.user = response.data;
-      }, function(response){
-        console.log(response);
-      })
+      vm.init();
   }
 })();

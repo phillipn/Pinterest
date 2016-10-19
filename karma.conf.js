@@ -21,9 +21,16 @@ module.exports = function(config) {
       './app_client/lib/angular-masonry/angular-masonry.js',
       './app_client/app.js',
       './app_client/home/home.controller.js',
+      './app_client/common/directives/defaultImage/defaultImage.directive.js',
+      './app_client/common/directives/footerGeneric/footerGeneric.directive.js',
+      './app_client/common/filters/likeFilter.filter.js',
+      './app_client/common/directives/templates/footerGeneric.template.html',
       './app_client/common/services/authentication.service.js',
       './app_client/common/services/pictureData.service.js',
       './tests/controller_tests/home.spec.js',
+      './tests/directive_tests/default_image.spec.js',
+      './tests/directive_tests/footerGeneric.spec.js',
+      './tests/filter_tests/likeFilter.spec.js',
       './tests/service_tests/authentication.spec.js',
       './tests/service_tests/pictureData.spec.js'
     ],
@@ -37,6 +44,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      './app_client/common/directives/templates/*.html': ['ng-html2js']
     },
 
 
