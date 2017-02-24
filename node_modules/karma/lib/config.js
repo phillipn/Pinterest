@@ -138,6 +138,7 @@ var normalizeConfig = function (config, configFilePath) {
   config.exclude = config.exclude.map(basePathResolve)
   config.customContextFile = config.customContextFile && basePathResolve(config.customContextFile)
   config.customDebugFile = config.customDebugFile && basePathResolve(config.customDebugFile)
+  config.customClientContextFile = config.customClientContextFile && basePathResolve(config.customClientContextFile)
 
   // normalize paths on windows
   config.basePath = helper.normalizeWinPath(config.basePath)
@@ -145,6 +146,7 @@ var normalizeConfig = function (config, configFilePath) {
   config.exclude = config.exclude.map(helper.normalizeWinPath)
   config.customContextFile = helper.normalizeWinPath(config.customContextFile)
   config.customDebugFile = helper.normalizeWinPath(config.customDebugFile)
+  config.customClientContextFile = helper.normalizeWinPath(config.customClientContextFile)
 
   // normalize urlRoot
   config.urlRoot = normalizeUrlRoot(config.urlRoot)
@@ -183,6 +185,16 @@ var normalizeConfig = function (config, configFilePath) {
     config.autoWatch = false
   }
 
+  if (config.runInParent) {
+    log.debug('useIframe set to false, because using runInParent')
+    config.useIframe = false
+  }
+
+  if (!config.singleRun && !config.useIframe && config.runInParent) {
+    log.debug('singleRun set to true, because using runInParent')
+    config.singleRun = true
+  }
+
   if (helper.isString(config.reporters)) {
     config.reporters = config.reporters.split(',')
   }
@@ -197,6 +209,10 @@ var normalizeConfig = function (config, configFilePath) {
 
   if (config.formatError && !helper.isFunction(config.formatError)) {
     throw new TypeError('Invalid configuration: formatError option must be a function.')
+  }
+
+  if (config.processKillTimeout && !helper.isNumber(config.processKillTimeout)) {
+    throw new TypeError('Invalid configuration: processKillTimeout option must be a number.')
   }
 
   var defaultClient = config.defaultClient || {}
@@ -280,6 +296,7 @@ var Config = function () {
   this.frameworks = []
   this.protocol = 'http:'
   this.port = constant.DEFAULT_PORT
+  this.listenAddress = constant.DEFAULT_LISTEN_ADDR
   this.hostname = constant.DEFAULT_HOSTNAME
   this.httpsServerConfig = {}
   this.basePath = ''
@@ -291,6 +308,7 @@ var Config = function () {
   }
   this.customContextFile = null
   this.customDebugFile = null
+  this.customClientContextFile = null
   this.exclude = []
   this.logLevel = constant.LOG_INFO
   this.colors = true
@@ -315,16 +333,19 @@ var Config = function () {
   this.defaultClient = this.client = {
     args: [],
     useIframe: true,
+    runInParent: false,
     captureConsole: true,
     clearContext: true
   }
   this.browserDisconnectTimeout = 2000
   this.browserDisconnectTolerance = 0
   this.browserNoActivityTimeout = 10000
+  this.processKillTimeout = 2000
   this.concurrency = Infinity
   this.failOnEmptyTestSuite = true
   this.retryLimit = 2
   this.detached = false
+  this.crossOriginAttribute = true
 }
 
 var CONFIG_SYNTAX_HELP = '  module.exports = function(config) {\n' +
@@ -340,6 +361,9 @@ var parseConfig = function (configFilePath, cliOptions) {
 
     try {
       configModule = require(configFilePath)
+      if (typeof configModule === 'object' && typeof configModule.default !== 'undefined') {
+        configModule = configModule.default
+      }
     } catch (e) {
       if (e.code === 'MODULE_NOT_FOUND' && e.message.indexOf(configFilePath) !== -1) {
         log.error('File %s does not exist!', configFilePath)
@@ -371,6 +395,15 @@ var parseConfig = function (configFilePath, cliOptions) {
   }
 
   var config = new Config()
+
+  // save and reset hostname and listenAddress so we can detect if the user
+  // changed them
+  var defaultHostname = config.hostname
+  config.hostname = null
+  var defaultListenAddress = config.listenAddress
+  config.listenAddress = null
+
+  // add the user's configuration in
   config.set(cliOptions)
 
   try {
@@ -382,6 +415,20 @@ var parseConfig = function (configFilePath, cliOptions) {
 
   // merge the config from config file and cliOptions (precedence)
   config.set(cliOptions)
+
+  // if the user changed listenAddress, but didn't set a hostname, warn them
+  if (config.hostname === null && config.listenAddress !== null) {
+    log.warn('ListenAddress was set to %s but hostname was left as the default: ' +
+      '%s. If your browsers fail to connect, consider changing the hostname option.',
+      config.listenAddress, defaultHostname)
+  }
+  // restore values that weren't overwritten by the user
+  if (config.hostname === null) {
+    config.hostname = defaultHostname
+  }
+  if (config.listenAddress === null) {
+    config.listenAddress = defaultListenAddress
+  }
 
   // configure the logger as soon as we can
   logger.setup(config.logLevel, config.colors, config.loggers)

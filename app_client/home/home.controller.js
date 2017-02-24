@@ -123,6 +123,7 @@
     }
 
     vm.init = function(){
+      console.log('called');
       vm.selectedIndex = -1; // Whatever the default selected index is, use -1 for no selection
       vm.allPicsLinkEmph = true;
       vm.userPicsLinkEmph = false;

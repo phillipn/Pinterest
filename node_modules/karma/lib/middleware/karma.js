@@ -27,7 +27,8 @@ var urlparse = function (urlStr) {
 var common = require('./common')
 
 var VERSION = require('../constants').VERSION
-var SCRIPT_TAG = '<script type="%s" src="%s" crossorigin="anonymous"></script>'
+var SCRIPT_TAG = '<script type="%s" src="%s" %s></script>'
+var CROSSORIGIN_ATTRIBUTE = 'crossorigin="anonymous"'
 var LINK_TAG_CSS = '<link type="text/css" href="%s" rel="stylesheet">'
 var LINK_TAG_HTML = '<link href="%s" rel="import">'
 var SCRIPT_TYPE = {
@@ -88,7 +89,9 @@ var createKarmaMiddleware = function (
     var client = injector.get('config.client')
     var customContextFile = injector.get('config.customContextFile')
     var customDebugFile = injector.get('config.customDebugFile')
+    var customClientContextFile = injector.get('config.customClientContextFile')
     var jsVersion = injector.get('config.jsVersion')
+    var includeCrossOriginAttribute = injector.get('config.crossOriginAttribute')
 
     var requestUrl = request.normalizedUrl.replace(/\?.*/, '')
     var requestedRangeHeader = request.headers['range']
@@ -110,11 +113,16 @@ var createKarmaMiddleware = function (
 
     // serve client.html
     if (requestUrl === '/') {
-      return serveStaticFile('/client.html', requestedRangeHeader, response, function (data) {
-        return data
-          .replace('\n%X_UA_COMPATIBLE%', getXUACompatibleMetaElement(request.url))
-          .replace('%X_UA_COMPATIBLE_URL%', getXUACompatibleUrl(request.url))
-      })
+      // redirect client_with_context.html
+      if (!client.useIframe && client.runInParent) {
+        requestUrl = '/client_with_context.html'
+      } else { // serve client.html
+        return serveStaticFile('/client.html', requestedRangeHeader, response, function (data) {
+          return data
+            .replace('\n%X_UA_COMPATIBLE%', getXUACompatibleMetaElement(request.url))
+            .replace('%X_UA_COMPATIBLE_URL%', getXUACompatibleUrl(request.url))
+        })
+      }
     }
 
     // serve karma.js, context.js, and debug.js
@@ -137,11 +145,12 @@ var createKarmaMiddleware = function (
     // or debug.html - execution context without channel to the server
     var isRequestingContextFile = requestUrl === '/context.html'
     var isRequestingDebugFile = requestUrl === '/debug.html'
-    if (isRequestingContextFile || isRequestingDebugFile) {
+    var isRequestingClientContextFile = requestUrl === '/client_with_context.html'
+    if (isRequestingContextFile || isRequestingDebugFile || isRequestingClientContextFile) {
       return filesPromise.then(function (files) {
         var fileServer
         var requestedFileUrl
-        log.debug('custom files', customContextFile, customDebugFile)
+        log.debug('custom files', customContextFile, customDebugFile, customClientContextFile)
         if (isRequestingContextFile && customContextFile) {
           log.debug('Serving customContextFile %s', customContextFile)
           fileServer = serveFile
@@ -150,6 +159,10 @@ var createKarmaMiddleware = function (
           log.debug('Serving customDebugFile %s', customDebugFile)
           fileServer = serveFile
           requestedFileUrl = customDebugFile
+        } else if (isRequestingClientContextFile && customClientContextFile) {
+          log.debug('Serving customClientContextFile %s', customClientContextFile)
+          fileServer = serveFile
+          requestedFileUrl = customClientContextFile
         } else {
           log.debug('Serving static request %s', requestUrl)
           fileServer = serveStaticFile
@@ -159,7 +172,10 @@ var createKarmaMiddleware = function (
         fileServer(requestedFileUrl, requestedRangeHeader, response, function (data) {
           common.setNoCacheHeaders(response)
 
-          var scriptTags = files.included.map(function (file) {
+          var scriptTags = []
+          var scriptUrls = []
+          for (var i in files.included) {
+            var file = files.included[i]
             var filePath = file.path
             var fileExt = path.extname(filePath)
 
@@ -171,12 +187,16 @@ var createKarmaMiddleware = function (
               }
             }
 
+            scriptUrls.push(filePath)
+
             if (fileExt === '.css') {
-              return util.format(LINK_TAG_CSS, filePath)
+              scriptTags.push(util.format(LINK_TAG_CSS, filePath))
+              continue
             }
 
             if (fileExt === '.html') {
-              return util.format(LINK_TAG_HTML, filePath)
+              scriptTags.push(util.format(LINK_TAG_HTML, filePath))
+              continue
             }
 
             // The script tag to be placed
@@ -187,8 +207,9 @@ var createKarmaMiddleware = function (
               scriptType += ';version=' + jsVersion
             }
 
-            return util.format(SCRIPT_TAG, scriptType, filePath)
-          })
+            var crossOriginAttribute = includeCrossOriginAttribute ? CROSSORIGIN_ATTRIBUTE : ''
+            scriptTags.push(util.format(SCRIPT_TAG, scriptType, filePath, crossOriginAttribute))
+          }
 
           // TODO(vojta): don't compute if it's not in the template
           var mappings = files.served.map(function (file) {
@@ -203,11 +224,14 @@ var createKarmaMiddleware = function (
 
           var clientConfig = 'window.__karma__.config = ' + JSON.stringify(client) + ';\n'
 
+          var scriptUrlsJS = 'window.__karma__.scriptUrls = ' + JSON.stringify(scriptUrls) + ';\n'
+
           mappings = 'window.__karma__.files = {\n' + mappings.join(',\n') + '\n};\n'
 
           return data
             .replace('%SCRIPTS%', scriptTags.join('\n'))
             .replace('%CLIENT_CONFIG%', clientConfig)
+            .replace('%SCRIPT_URL_ARRAY%', scriptUrlsJS)
             .replace('%MAPPINGS%', mappings)
             .replace('\n%X_UA_COMPATIBLE%', getXUACompatibleMetaElement(request.url))
         })
