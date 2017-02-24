@@ -1,0 +1,1 @@
+When deploying to heroku make sure to change callback_url
