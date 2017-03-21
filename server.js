@@ -1,4 +1,4 @@
-// require('dotenv').config(); // remove for heroku
+require('dotenv').config(); // remove for heroku
 var express  = require('express');
 var path = require('path');
 var app = express();
@@ -42,9 +42,5 @@ app.use(function(req, res) {
 // launch ======================================================================
 app.listen(port);
 console.log('The magic happens on port ' + port);
-
-exports.closeServer = function(){
-  server.close();
-};
 
 module.exports = app;
