@@ -45,8 +45,9 @@ module.exports = function(passport) {
 
                 // if there is an error, stop everything and return that
                 // ie an error connecting to the database
-                if (err)
+                if (err){
                     return done(err);
+                }
 
                 // if the user is found then log them in
                 if (user) {
@@ -63,8 +64,9 @@ module.exports = function(passport) {
 
                     // save our user into the database
                     newUser.save(function(err) {
-                        if (err)
+                        if (err){
                             throw err;
+                        }
                         return done(null, newUser);
                     });
                 }
