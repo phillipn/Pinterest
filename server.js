@@ -1,4 +1,4 @@
-require('dotenv').config(); // remove for heroku
+// require('dotenv').config(); //
 var express  = require('express');
 var path = require('path');
 var app = express();
