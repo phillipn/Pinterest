@@ -46,7 +46,7 @@
           vm.userPictures = response.data;
         })
         .catch(function(response){
-          console.log(response.data);
+          console.i(response.data);
         });
     }
 
@@ -135,6 +135,7 @@
       vm.getAllPics();
       authentication.getCurrentUser()
         .then(function(response){
+          console.log(response);
           vm.user = response.data;
         }, function(response){
           console.log(response.data);

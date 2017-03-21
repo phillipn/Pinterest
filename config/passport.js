@@ -41,6 +41,7 @@ module.exports = function(passport) {
         process.nextTick(function() {
 
             User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
+              console.log(user);
 
                 // if there is an error, stop everything and return that
                 // ie an error connecting to the database
